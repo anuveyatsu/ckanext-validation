@@ -73,6 +73,20 @@ def run_validation_job(resource):
 
                 options[u'http_session'] = s
 
+
+    if dataset[u'private']:
+        pass_auth_header = t.asbool(
+                t.config.get(u'ckanext.validation.pass_auth_header', True))
+        s = requests.Session()
+        s.headers.update({
+            u'Authorization': t.config.get(
+                u'ckanext.validation.pass_auth_header_value',
+                _get_site_user_api_key())
+        })
+
+        options[u'http_session'] = s
+        
+
     if not source:
         source = resource[u'url']
 
